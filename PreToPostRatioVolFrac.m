@@ -2,7 +2,7 @@ function [uorgpre,uorgpost,uinorgpre,uinorgpost]=PreToPostRatioVolFrac(inorg,org
 % All mass absorption coefficients are in units of cm^2/g
 
 %% Inorganic Plot
-
+%These values refer to carbon pre (278 eV) and post (320 eV) edge.
 uc_pre=1932;
 uc_post=39508;
 un_pre=3729;
@@ -51,6 +51,15 @@ uoxal_post=(2*12*uc_post+2*1*uh_post+4*16*uo_post)/...
 
 usuc_pre = (12.*12.*uc_pre + 22.*1.*uh_pre + 11.*16.*uo_pre) ./ (12.*12 + 22.*1 + 11.*16);
 usuc_post = (12.*12.*uc_post + 22.*1.*uh_post + 11.*16.*uo_post) ./ (12.*12 + 22.*1 + 11.*16);
+
+uPropane123TriCarboxylicAcid_pre = (12.*12.*uc_pre + 8.*1*uh_pre + 6.*16.*uo_pre) ./ (12.*12 + 8.*1 + 6.*16);
+uPropane123TriCarboxylicAcid_post = (12.*12.*uc_post + 8.*1*uh_post + 6.*16.*uo_post) ./ (12.*12 + 8.*1 + 6.*16);
+
+uPinonicAcid_pre = (10.*12.*uc_pre + 16.*1*uh_pre + 3.*16.*uo_pre) ./ (10.*12 + 16.*1 + 3.*16);
+uPinonicAcid_post = (10.*12.*uc_post + 16.*1*uh_post + 3.*16.*uo_post) ./ (10.*12 + 16.*1 + 3.*16);
+
+uPinene_pre = (10.*12.*uc_pre + 16.*1*uh_pre + 0.*16.*uo_pre) ./ (10.*12 + 16.*1 + 0.*16);
+uPinene_post = (10.*12.*uc_post + 16.*1*uh_post + 0.*16.*uo_post) ./ (10.*12 + 16.*1 + 0.*16);
 
 usoot_pre=uc_pre;
 usoot_post=uc_post;
@@ -110,6 +119,15 @@ if strcmp(org,'adipic')==1
 elseif strcmp(org,'sucrose') == 1
     uorgpre = usuc_pre;
     uorgpost = usuc_post;
+elseif strcmp(org,'tricarboxylic acid') == 1
+	uorgpre = uPropane123TriCarboxylicAcid_pre;
+	uorgpost = uPropane123TriCarboxylicAcid_post;
+elseif strcmp(org,'pinonic acid') == 1
+	uorgpre = uPinonicAcid_pre;
+	uorgpost = uPinonicAcid_post;
+elseif strcmp(org,'pinene') == 1
+	uorgpre = uPinene_pre;
+	uorgpost = uPinene_post;
 end
 
 if strcmp(inorg,'NaCl')==1
@@ -118,6 +136,11 @@ if strcmp(inorg,'NaCl')==1
 elseif strcmp(inorg,'(NH4)2SO4') == 1
     uinorgpre = inorgPre{1};
     uinorgpost = inorgPost{1};
+elseif strcmp(inorg, 'CaCO3')
+	uinorgpre = inorgPre{9};
+	uinorgpost = inorgPost{9};
+end
+
 end
 % speciesStr={'(NH_{4})_{2}SO_{4}','NH_{4}NO_{3}','NaNO_{3}','KNO_{3}',...
 %     'Na_{2}SO_{4}','NaCl','KCl','Fe_{2}O_3','CaCO_{3}','ZnO','Pb(NO_{3})_{2}'...
