@@ -1,28 +1,23 @@
-function Snew = CalciumMaps(Snew)
+function Snew = CalciumMaps(Snew, binmap)
 
 
+%% Input checking
+if nargin == 1
+	binmap = Snew.binmap;
+end
+
+%% Determining closest energy value
 energy = Snew.eVenergy;
 
-[~,capreidx] = min(abs(energy - 347));
-[~,capostidx] = min(abs(energy - 352.5));
+[~, capreidx] = ClosestValue(energy, 347, [340, 349.5],'Error Message','Missing Ca pre-edge energy');
+[~, capostidx] = ClosestValue(energy, 352.5, [350, 355],'Error Message','Missing Ca post-edge energy');
 
-capreval = energy(capreidx);
-capostval = energy(capostidx);
+%% Simple Ca map definition
+totCa = Snew.spectr(:,:,capostidx) - Snew.spectr(:,:,capreidx);
 
+totCa(totCa < 0) = 0;
 
-if capreval > 340 && capreval < 349
-else
-    disp('missing Ca pre-edge energy');
-end
-
-if capostval > 350 && capostval < 355
-else
-    disp('Missing Ca post-edge energy');
-end
-
-totCa = Snew.spectr(:,:,capostidx); - Snew.spectr(:,:,capreidx);
-
-totCa = totCa .* Snew.binmap;
+totCa = totCa .* binmap;
 
 Snew.totCa = totCa;
 
